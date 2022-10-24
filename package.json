@@ -1,22 +1,18 @@
 {
-  "name": "nftshuffle",
+  "name": "charged-batch",
   "version": "1.0.0",
-  "description": "NFTHack 2022: NFT that points to a random number.",
+  "description": "Batching charged particle actions",
   "main": "index.js",
   "scripts": {
     "test": "yarn hardhat test --deploy-fixture"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scammi/NFTShuffle.git"
+    "url": ""
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/scammi/NFTShuffle/issues"
-  },
-  "homepage": "https://github.com/scammi/NFTShuffle#readme",
   "dependencies": {
     "@appliedblockchain/chainlink-contracts": "^0.0.4",
     "@chainlink/contracts": "^0.4.1",
