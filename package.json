@@ -4,7 +4,9 @@
   "description": "Batching charged particle actions",
   "main": "index.js",
   "scripts": {
-    "test": "yarn hardhat test --deploy-fixture"
+    "test": "yarn hardhat test --deploy-fixture",
+    "dev": "yarn hardhat node --network hardhat",
+    "found": "yarn hardhat run --network localhost scripts/foundTestAccount.js"
   },
   "repository": {
     "type": "git",
