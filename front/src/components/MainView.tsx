@@ -26,6 +26,9 @@ const MainView = ({ }: Props) => {
     (async () => {
       try {
         const approvedForAll = await soul.isApprovedForAll(web3.wallet, chargedBatch.address);
+        const ownerOfFirst = await soul.ownerOf(1);
+        console.log('1 NFT owner >>>>>>> ', ownerOfFirst);
+
         setIsApprovedForAll(approvedForAll);
       } catch (e) {
         console.log(e);
@@ -56,11 +59,11 @@ const MainView = ({ }: Props) => {
   const BatchBondButton = () => {
     const batchBondHandle = async () => {
       try {
-        console.log(batchData);
         const response = await chargedBatch.createBonds(
           'generic.B',
           batchData
         );
+
         const receipt = await response.wait();
         console.log({receipt});
         setBatchBondTransaction(receipt);
