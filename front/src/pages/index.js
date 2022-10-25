@@ -5,14 +5,14 @@ import Seo from "../components/seo";
 import Layout from "../components/layout";
 
 import { useWeb3Context } from "../context/Web3";
-import { TicketView } from "../components/TicketView";
+import { MainView } from "../components/MainView";
 import { GLOBALS } from "../utils/globals";
 
 const IndexPage = () => { 
   const [ web3 ] = useWeb3Context();
 
   const isNetworkSupported = () => {
-    const supportedNetworks = Object.keys(GLOBALS.CONTRACT_ADDRESSES.shuffleOne);
+    const supportedNetworks = Object.keys(GLOBALS.CONTRACT_ADDRESSES.chargedBatch);
     return supportedNetworks.includes(String(web3.chainId));
   };
 
@@ -21,10 +21,10 @@ const IndexPage = () => {
       <Seo title="Home" />
       <div className={styles.textCenter}>
         <h1>
-          Welcome to <b>NFTshuffle!</b>
+          Welcome to <b>Massv!</b>
         </h1>
           {
-           web3.isConnected ? isNetworkSupported() ? <TicketView /> : 'Please select a supported network' : 
+           web3.isConnected ? isNetworkSupported() ? <MainView /> : 'Please select a supported network' : 
             'Please connect wallet'
           }
       </div>
