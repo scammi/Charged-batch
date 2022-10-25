@@ -91,26 +91,58 @@ describe("Charged", function () {
       expect(bondCountAfterDepositValue.toNumber()).equal(1);
     });
 
-    it.only("Create multiple bonds", async() => {
-       const createBonds = await batch.createBonds([
-        {
-          nftTokenAddress: goerliAddresses.protonB.address,
-          nftTokenId: 1,
-          nftTokenAmount: 1
-        },
-        {
-          nftTokenAddress: goerliAddresses.protonB.address,
-          nftTokenId: 1,
-          nftTokenAmount: 1
-        },
-        {
-          nftTokenAddress: goerliAddresses.protonB.address,
-          nftTokenId: 1,
-          nftTokenAmount: 1
-        }
-       ]);
+    it("Create multiple bonds", async () => {
+      const signer = ethers.provider.getSigner();
+      const signerAddress = await signer.getAddress();
+      const currentTestNetwork = await ethers.provider.getNetwork();
 
-       console.log(createBonds.toNumber());
+      const charged = new Charged({ providers: ethers.provider, signer });
+
+      const nft = charged.NFT(goerliAddresses.protonB.address, 1);
+      const bondCountBeforeDeposit = await nft.getBonds('generic.B');
+      const bondCountBeforeDepositValue = bondCountBeforeDeposit[currentTestNetwork.chainId].value;
+      expect(bondCountBeforeDepositValue.toNumber()).equal(0);
+
+      const mintPromises = [1, 2, 3, 4].map(() => {
+        return soul.safeMint(
+          signerAddress,
+          'tokenUri.com',
+        );
+      });
+
+      await Promise.all(mintPromises);
+
+      const txApprove = await soul.setApprovalForAll(batch.address, true);
+      await txApprove.wait();
+
+      const approvedBeforeBatchAction = await soul.isApprovedForAll(signerAddress, batch.address);
+      expect(approvedBeforeBatchAction).to.equal(true);
+
+      await batch.createBonds(
+        goerliAddresses.protonB.address,
+        1,
+        'generic.B',
+        [
+          {
+            nftTokenAddress: soul.address,
+            nftTokenId: 1,
+            nftTokenAmount: 1
+          },
+          {
+            nftTokenAddress: soul.address,
+            nftTokenId: 2,
+            nftTokenAmount: 1
+          },
+          {
+            nftTokenAddress: soul.address,
+            nftTokenId: 3,
+            nftTokenAmount: 1
+          }
+        ]
+      );
+      const bondCountAfterDeposit = await nft.getBonds('generic.B');
+      const bondCountAfterDepositValue = bondCountAfterDeposit[currentTestNetwork.chainId].value;
+      expect(bondCountAfterDepositValue.toNumber()).equal(3);
     });
   });
 })
