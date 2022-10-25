@@ -28,8 +28,11 @@ contract ChargedBatch {
   function singleBond(
     address contractAddress,
     uint256 tokenId
-  ) 
-  external view returns (address approved){
+  ) external returns (address approved) {
+    // require(ERC721(contractAddress).getApproved(tokenId) == address(this), "Missing permission");
+
+    ERC721(contractAddress).approve(address(charged), tokenId);
+
     return ERC721(contractAddress).getApproved(tokenId);
   }
 }
