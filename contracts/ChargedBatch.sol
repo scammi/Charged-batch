@@ -19,6 +19,8 @@ interface ChargedParticles {
 contract ChargedBatch {
   ChargedParticles charged;
   struct Bond {
+    address basketNftAddress;
+    uint256 basketNftTokenId;
     address nftTokenAddress;
     uint256 nftTokenId;
     uint256 nftTokenAmount;
@@ -39,7 +41,6 @@ contract ChargedBatch {
     uint256 nftTokenId,
     uint256 nftTokenAmount
   ) public returns (address approved) {
-
     address owner = ERC721(nftTokenAddress).ownerOf(nftTokenId);
     require(! ERC721(contractAddress).isApprovedForAll(owner, address(this)), "Missing permission");
     
@@ -51,16 +52,14 @@ contract ChargedBatch {
   }
 
   function createBonds(
-    address contractAddress,
-    uint256 tokenId,
     string calldata basketManagerId,  
     Bond[] memory bonds
   ) external returns (uint count) {
 
     for (uint256 i = 0; i < bonds.length; i ++) {
       singleBond(
-        contractAddress,
-        tokenId,
+        bonds[i].basketNftAddress,
+        bonds[i].basketNftTokenId,
         basketManagerId,
         bonds[i].nftTokenAddress,
         bonds[i].nftTokenId,

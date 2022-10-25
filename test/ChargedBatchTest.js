@@ -112,28 +112,32 @@ describe("Charged", function () {
 
       await Promise.all(mintPromises);
 
-      // const txApprove = await soul.setApprovalForAll(batch.address, true);
-      // await txApprove.wait();
+      const txApprove = await soul.setApprovalForAll(batch.address, true);
+      await txApprove.wait();
 
-      // const approvedBeforeBatchAction = await soul.isApprovedForAll(signerAddress, batch.address);
-      // expect(approvedBeforeBatchAction).to.equal(true);
+      const approvedBeforeBatchAction = await soul.isApprovedForAll(signerAddress, batch.address);
+      expect(approvedBeforeBatchAction).to.equal(true);
 
       await batch.createBonds(
-        goerliAddresses.protonB.address,
-        1,
         'generic.B',
         [
           {
+            basketNftAddress: goerliAddresses.protonB.address,
+            basketNftTokenId: 1,
             nftTokenAddress: soul.address,
             nftTokenId: 1,
             nftTokenAmount: 1
           },
           {
+            basketNftAddress: goerliAddresses.protonB.address,
+            basketNftTokenId: 1,
             nftTokenAddress: soul.address,
             nftTokenId: 2,
             nftTokenAmount: 1
           },
           {
+            basketNftAddress: goerliAddresses.protonB.address,
+            basketNftTokenId: 2,
             nftTokenAddress: soul.address,
             nftTokenId: 3,
             nftTokenAmount: 1
@@ -142,7 +146,12 @@ describe("Charged", function () {
       );
       const bondCountAfterDeposit = await nft.getBonds('generic.B');
       const bondCountAfterDepositValue = bondCountAfterDeposit[currentTestNetwork.chainId].value;
-      expect(bondCountAfterDepositValue.toNumber()).equal(3);
+      expect(bondCountAfterDepositValue.toNumber()).equal(2);
+
+      const nft2 = charged.NFT(goerliAddresses.protonB.address, 2);
+      const bond2CountAfterDeposit = await nft2.getBonds('generic.B');
+      const bond2CountAfterDepositValue = bond2CountAfterDeposit[currentTestNetwork.chainId].value;
+      expect(bond2CountAfterDepositValue.toNumber()).equal(1);
     });
   });
 })
