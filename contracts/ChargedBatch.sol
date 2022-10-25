@@ -14,12 +14,16 @@ interface ChargedParticles {
   function getStateAddress() external view returns (address stateAddress);
 }
 
-contract Loop {
+contract ChargedBatch {
   ChargedParticles charged;
   constructor(address deployedChargedParticles) public {
     charged = ChargedParticles(deployedChargedParticles);   
   }
   function getStateAddress() external view returns (address stateAddress) {
     return  charged.getStateAddress();
+  }
+
+  function singleBond() external {
+
   }
 }
