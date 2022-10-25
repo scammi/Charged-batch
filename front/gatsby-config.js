@@ -1,7 +1,7 @@
 module.exports = {
-  pathPrefix: 'NFTShuffle/',
+  pathPrefix: 'Charged-batch/',
   siteMetadata: {
-    title: `NFTshuffle`,
+    title: `Massv`,
     description: `.`,
     author: `@gatsbyjs`,
     siteUrl: `https://gatsbystarterdefaultsource.gatsbyjs.io/`,

@@ -4,7 +4,10 @@ import { goerliAddresses } from "@charged-particles/charged-js-sdk";
 
 import { useChargedBatch } from "../hooks/useChargedBatch";
 import { useSoul } from "../hooks/useSoul";
+
+import { CSVSelector } from "./CSVSelector";
 import { useWeb3Context } from "../context/Web3";
+import _ from "lodash";
 
 type Props = {}
 
@@ -17,6 +20,7 @@ const MainView = ({ }: Props) => {
   const [ isApprovedForAll, setIsApprovedForAll ] = useState(false);
   const [ approvalForAllTransaction, setApprovalForAllTransaction ] = useState();
   const [ batchBondTransaction, setBatchBondTransaction ] = useState();
+  const [ batchData, setBatchData ] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -52,31 +56,10 @@ const MainView = ({ }: Props) => {
   const BatchBondButton = () => {
     const batchBondHandle = async () => {
       try {
+        console.log(batchData);
         const response = await chargedBatch.createBonds(
           'generic.B',
-          [
-            {
-              basketNftAddress: goerliAddresses.protonB.address,
-              basketNftTokenId: 1,
-              nftTokenAddress: soul.address,
-              nftTokenId: 1,
-              nftTokenAmount: 1
-            },
-            {
-              basketNftAddress: goerliAddresses.protonB.address,
-              basketNftTokenId: 1,
-              nftTokenAddress: soul.address,
-              nftTokenId: 2,
-              nftTokenAmount: 1
-            },
-            {
-              basketNftAddress: goerliAddresses.protonB.address,
-              basketNftTokenId: 2,
-              nftTokenAddress: soul.address,
-              nftTokenId: 3,
-              nftTokenAmount: 1
-            }
-          ]
+          batchData
         );
         const receipt = await response.wait();
         console.log({receipt});
@@ -88,7 +71,7 @@ const MainView = ({ }: Props) => {
     return (
       <Button 
         onClick={() => { batchBondHandle() }}
-        disabled={!isApprovedForAll}
+        disabled={!isApprovedForAll && ! _.isEmpty(batchData)}
       > 
         Batch Bonding 
       </Button>
@@ -100,6 +83,7 @@ const MainView = ({ }: Props) => {
       <div>
         <IsApprovedForAllButton /> 
         <BatchBondButton /> 
+        <CSVSelector setBatchData={setBatchData}/>
       </div>
     </>
   );
