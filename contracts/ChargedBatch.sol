@@ -50,7 +50,24 @@ contract ChargedBatch {
     return ERC721(contractAddress).getApproved(tokenId);
   }
 
-  function createBonds(Bond[] memory bonds) external pure returns (uint count) {
+  function createBonds(
+    address contractAddress,
+    uint256 tokenId,
+    string calldata basketManagerId,  
+    Bond[] memory bonds
+  ) external returns (uint count) {
+
+    for (uint256 i = 0; i < bonds.length; i ++) {
+      charged.covalentBond(
+        contractAddress,
+        tokenId,
+        basketManagerId,
+        bonds[i].nftTokenAddress,
+        bonds[i].nftTokenId,
+        bonds[i].nftTokenAmount
+      ); 
+    }
+
     return bonds.length;
   }
 }
