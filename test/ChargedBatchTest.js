@@ -90,5 +90,27 @@ describe("Charged", function () {
       const bondCountAfterDepositValue = bondCountAfterDeposit[currentTestNetwork.chainId].value;
       expect(bondCountAfterDepositValue.toNumber()).equal(1);
     });
+
+    it.only("Create multiple bonds", async() => {
+       const createBonds = await batch.createBonds([
+        {
+          nftTokenAddress: goerliAddresses.protonB.address,
+          nftTokenId: 1,
+          nftTokenAmount: 1
+        },
+        {
+          nftTokenAddress: goerliAddresses.protonB.address,
+          nftTokenId: 1,
+          nftTokenAmount: 1
+        },
+        {
+          nftTokenAddress: goerliAddresses.protonB.address,
+          nftTokenId: 1,
+          nftTokenAmount: 1
+        }
+       ]);
+
+       console.log(createBonds.toNumber());
+    });
   });
 })

@@ -18,6 +18,12 @@ interface ChargedParticles {
 
 contract ChargedBatch {
   ChargedParticles charged;
+  struct Bond {
+    address nftTokenAddress;
+    uint256 nftTokenId;
+    uint256 nftTokenAmount;
+  }
+
   constructor(address deployedChargedParticles) public {
     charged = ChargedParticles(deployedChargedParticles);   
   }
@@ -42,5 +48,9 @@ contract ChargedBatch {
 
     charged.covalentBond(contractAddress, tokenId, basketManagerId, nftTokenAddress, nftTokenId, nftTokenAmount);
     return ERC721(contractAddress).getApproved(tokenId);
+  }
+
+  function createBonds(Bond[] memory bonds) external pure returns (uint count) {
+    return bonds.length;
   }
 }
