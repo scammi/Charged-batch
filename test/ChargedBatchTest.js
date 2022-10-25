@@ -49,9 +49,11 @@ describe("Charged", function () {
 
       await txCreateProton.wait();
 
-      console.log(batch.address)
-      // const txApprove = await erc721Contract.approve(, protonId.toString());
-      // await txApprove.wait();
+      const txApprove = await erc721Contract.approve(batch.address, protonId.toString());
+      await txApprove.wait();
+
+      const approved = await batch.singleBond(goerliAddresses.protonB.address, protonId.toString());
+      expect(approved).to.equal(batch.address);
     });
   });
 })

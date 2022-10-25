@@ -1,5 +1,7 @@
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol"; //OZ: ERC721
+
 interface ChargedParticles {
 
   function covalentBond(
@@ -23,7 +25,11 @@ contract ChargedBatch {
     return  charged.getStateAddress();
   }
 
-  function singleBond() external {
-
+  function singleBond(
+    address contractAddress,
+    uint256 tokenId
+  ) 
+  external view returns (address approved){
+    return ERC721(contractAddress).getApproved(tokenId);
   }
 }
