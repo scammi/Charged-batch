@@ -9,10 +9,10 @@ const useChargedBatch = () => {
   const [ web3 ] = useWeb3Context();
 
   const chainId = web3.chainId == 1337 ? 31337 : web3.chainId ;
-  const shuffleOneAddress = GLOBALS.CONTRACT_ADDRESSES.chargedBatch[chainId];
+  const chargedBatchAddress = GLOBALS.CONTRACT_ADDRESSES.chargedBatch[chainId];
 
   const provider = web3.writeProvider ? web3.writeProvider.getSigner() : web3.readProvider;
-  const contract = new Contract(shuffleOneAddress, chargedBatch.abi, provider);
+  const contract = new Contract(chargedBatchAddress, chargedBatch.abi, provider);
 
   return contract;
 };

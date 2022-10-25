@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@mui/material";
+import { goerliAddresses } from "@charged-particles/charged-js-sdk";
+
 import { useChargedBatch } from "../hooks/useChargedBatch";
 import { useSoul } from "../hooks/useSoul";
-
-import { ethers } from "ethers"
 import { useWeb3Context } from "../context/Web3";
 
 type Props = {}
@@ -16,40 +16,91 @@ const MainView = ({ }: Props) => {
 
   const [ isApprovedForAll, setIsApprovedForAll ] = useState(false);
   const [ approvalForAllTransaction, setApprovalForAllTransaction ] = useState();
+  const [ batchBondTransaction, setBatchBondTransaction ] = useState();
 
   useEffect(() => {
     (async () => {
       try {
         const approvedForAll = await soul.isApprovedForAll(web3.wallet, chargedBatch.address);
-        console.log('>>>>>>>> ' ,approvedForAll);
         setIsApprovedForAll(approvedForAll);
 
       } catch (e) {
         console.log(e);
       };
     })();
-  }, [web3, soul, chargedBatch, approvalForAllTransaction]);
+  }, [web3, soul, chargedBatch, approvalForAllTransaction, batchBondTransaction]);
 
-  const SetIsApprovedForAllButton = () => {
+  const IsApprovedForAllButton = () => {
     const approveAllHandle = async () => {
       try {
         const response = await soul.setApprovalForAll(chargedBatch.address, true);
         const receipt = await response.wait();
-
         setApprovalForAllTransaction(receipt);
       } catch (e) {
         console.log(e);
       }
     };
     return (
-      <Button onClick={() => { approveAllHandle() }}> Approve </Button>
+      <Button 
+        onClick={() => { approveAllHandle() }}
+        disabled={isApprovedForAll}
+      > 
+        Approve 
+      </Button>
     );
   };
+
+  const BatchBondButton = () => {
+    const batchBondHandle = async () => {
+      try {
+        const response = await chargedBatch.createBonds(
+          'generic.B',
+          [
+            {
+              basketNftAddress: goerliAddresses.protonB.address,
+              basketNftTokenId: 1,
+              nftTokenAddress: soul.address,
+              nftTokenId: 1,
+              nftTokenAmount: 1
+            },
+            {
+              basketNftAddress: goerliAddresses.protonB.address,
+              basketNftTokenId: 1,
+              nftTokenAddress: soul.address,
+              nftTokenId: 2,
+              nftTokenAmount: 1
+            },
+            {
+              basketNftAddress: goerliAddresses.protonB.address,
+              basketNftTokenId: 2,
+              nftTokenAddress: soul.address,
+              nftTokenId: 3,
+              nftTokenAmount: 1
+            }
+          ]
+        );
+        const receipt = await response.wait();
+        console.log({receipt});
+        setBatchBondTransaction(receipt);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    return (
+      <Button 
+        onClick={() => { batchBondHandle() }}
+        // disabled={isApprovedForAll}
+      > 
+        Batch Bonding 
+      </Button>
+    );
+  }
 
   return (
     <>
       <div>
-        <SetIsApprovedForAllButton /> 
+        <IsApprovedForAllButton /> 
+        <BatchBondButton /> 
       </div>
     </>
   );
