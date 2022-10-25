@@ -1,15 +1,41 @@
 const { expect } = require("chai");
-const { ethers, deployments } = require("hardhat");
+const { ethers, deployments, network } = require("hardhat");
 
-const { default: Charged, goerliAddresses, protonAbi } = require("@charged-particles/charged-js-sdk");
+const { default: Charged, goerliAddresses, protonBAbi, chargedParticlesAbi, chargedSettingsAbi } = require("@charged-particles/charged-js-sdk");
 
 describe("Charged", function () {
+  const ChargedParticlesContract = new ethers.Contract(goerliAddresses.chargedParticles.address, chargedParticlesAbi);
+  const ChargedSettingContract = new ethers.Contract(goerliAddresses.chargedSettings.address, chargedSettingsAbi);
 
-  let batch;
+  let batch, soul, signers, adminAddress, customNFTdeployedAddress;
 
   beforeEach(async () => {
     await deployments.fixture(["ChargedBatch"]);
     batch = await ethers.getContract("ChargedBatch");
+    soul = await ethers.getContract("Soul");
+
+    // Get Charged Particle owner address
+    adminAddress = await ChargedParticlesContract.connect(ethers.provider).owner();
+    customNFTdeployedAddress = soul.address;
+
+    // // impersonate admin account 
+    await network.provider.request({
+      method: "hardhat_impersonateAccount",
+      params: [adminAddress],
+    });
+
+    const owner = await ethers.getSigner(adminAddress);
+    const whiteListTx = await ChargedSettingContract.connect(owner).enableNftContracts([customNFTdeployedAddress]);
+    await whiteListTx.wait();
+
+    signers = await ethers.getSigners();
+  });
+
+  afterEach(async () => {
+    await hre.network.provider.request({
+      method: "hardhat_stopImpersonatingAccount",
+      params: [adminAddress],
+    });
   });
 
   describe("ChargedBatch", function () {
@@ -51,12 +77,12 @@ describe("Charged", function () {
 
       const txApprove = await erc721Contract.setApprovalForAll(batch.address, true);
       await txApprove.wait();
-      
+
       const approvedBeforeBatchAction = await erc721Contract.isApprovedForAll(signerAddress, batch.address);
       expect(approvedBeforeBatchAction).to.equal(true);
 
       const singleBond = await batch.singleBond(
-        goerliAddresses.protonB.address, 
+        goerliAddresses.protonB.address,
         protonId.toString(),
         'generic.B',
         goerliAddresses.protonB.address,

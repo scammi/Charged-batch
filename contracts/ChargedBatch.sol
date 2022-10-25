@@ -37,10 +37,7 @@ contract ChargedBatch {
     
     // TODO manage erc1155
     ERC721(contractAddress).approve(address(charged), tokenId);
-
     charged.covalentBond(contractAddress, tokenId, basketManagerId, nftTokenAddress, nftTokenId, nftTokenAmount);
-
-
     return ERC721(contractAddress).getApproved(tokenId);
   }
 }
