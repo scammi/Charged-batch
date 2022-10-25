@@ -23,7 +23,6 @@ const MainView = ({ }: Props) => {
       try {
         const approvedForAll = await soul.isApprovedForAll(web3.wallet, chargedBatch.address);
         setIsApprovedForAll(approvedForAll);
-
       } catch (e) {
         console.log(e);
       };
@@ -89,7 +88,7 @@ const MainView = ({ }: Props) => {
     return (
       <Button 
         onClick={() => { batchBondHandle() }}
-        // disabled={isApprovedForAll}
+        disabled={!isApprovedForAll}
       > 
         Batch Bonding 
       </Button>
