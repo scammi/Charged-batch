@@ -18,7 +18,7 @@ describe("Charged", function () {
     adminAddress = await ChargedParticlesContract.connect(ethers.provider).owner();
     customNFTdeployedAddress = soul.address;
 
-    // // impersonate admin account 
+    // impersonate admin account 
     await network.provider.request({
       method: "hardhat_impersonateAccount",
       params: [adminAddress],
@@ -60,35 +60,33 @@ describe("Charged", function () {
       expect(bondCountBeforeDepositValue.toNumber()).equal(0);
 
       // Mint proton
-      const erc721Contract = new ethers.Contract(goerliAddresses.protonB.address, protonBAbi, signer);
-      const protonId = await erc721Contract.callStatic.createBasicProton(
-        signerAddress,
+      const soulId = await soul.callStatic.safeMint(
         signerAddress,
         'tokenUri.com',
       );
 
-      const txCreateProton = await erc721Contract.createBasicProton(
-        signerAddress,
+      const txCreateProton = await soul.safeMint(
         signerAddress,
         'tokenUri.com',
       );
 
       await txCreateProton.wait();
 
-      const txApprove = await erc721Contract.setApprovalForAll(batch.address, true);
+      const txApprove = await soul.setApprovalForAll(batch.address, true);
       await txApprove.wait();
 
-      const approvedBeforeBatchAction = await erc721Contract.isApprovedForAll(signerAddress, batch.address);
+      const approvedBeforeBatchAction = await soul.isApprovedForAll(signerAddress, batch.address);
       expect(approvedBeforeBatchAction).to.equal(true);
 
       const singleBond = await batch.singleBond(
         goerliAddresses.protonB.address,
-        protonId.toString(),
-        'generic.B',
-        goerliAddresses.protonB.address,
         1,
+        'generic.B',
+        soul.address,
+        soulId.toString(),
         1
       );
+
       const singleBondReceipt = await singleBond.wait();
       console.log(singleBond, singleBondReceipt);
 

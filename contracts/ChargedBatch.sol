@@ -36,7 +36,10 @@ contract ChargedBatch {
     // require(ERC721(contractAddress).getApproved(tokenId) == address(this), "Missing permission");
     
     // TODO manage erc1155
-    ERC721(contractAddress).approve(address(charged), tokenId);
+    address owner = ERC721(nftTokenAddress).ownerOf(tokenId);
+    ERC721(nftTokenAddress).transferFrom(owner, address(this), nftTokenId);
+    ERC721(nftTokenAddress).approve(address(charged), tokenId);
+
     charged.covalentBond(contractAddress, tokenId, basketManagerId, nftTokenAddress, nftTokenId, nftTokenAmount);
     return ERC721(contractAddress).getApproved(tokenId);
   }
