@@ -48,15 +48,13 @@ describe("Charged", function () {
     it("Single bond", async () => {
       const signer = ethers.provider.getSigner();
       const signerAddress = await signer.getAddress();
+      const currentTestNetwork = await ethers.provider.getNetwork();
 
       const charged = new Charged({ providers: ethers.provider, signer });
 
       const nft = charged.NFT(goerliAddresses.protonB.address, 1);
-
       const bondCountBeforeDeposit = await nft.getBonds('generic.B');
-      const currentTestNetwork = await ethers.provider.getNetwork();
       const bondCountBeforeDepositValue = bondCountBeforeDeposit[currentTestNetwork.chainId].value;
-
       expect(bondCountBeforeDepositValue.toNumber()).equal(0);
 
       // Mint proton
@@ -87,11 +85,10 @@ describe("Charged", function () {
         1
       );
 
-      const singleBondReceipt = await singleBond.wait();
-      console.log(singleBond, singleBondReceipt);
-
-      // const approved = await erc721Contract.getApproved(protonId.toString());
-      // expect(approved).to.equal(goerliAddresses.chargedParticles.address);
+      await singleBond.wait();
+      const bondCountAfterDeposit = await nft.getBonds('generic.B');
+      const bondCountAfterDepositValue = bondCountAfterDeposit[currentTestNetwork.chainId].value;
+      expect(bondCountAfterDepositValue.toNumber()).equal(1);
     });
   });
 })
