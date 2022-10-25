@@ -39,10 +39,10 @@ contract ChargedBatch {
     uint256 nftTokenId,
     uint256 nftTokenAmount
   ) public returns (address approved) {
-    // require(ERC721(contractAddress).getApproved(tokenId) == address(this), "Missing permission");
-    
-    // TODO manage erc1155
+
     address owner = ERC721(nftTokenAddress).ownerOf(nftTokenId);
+    require(! ERC721(contractAddress).isApprovedForAll(owner, address(this)), "Missing permission");
+    
     ERC721(nftTokenAddress).transferFrom(owner, address(this), nftTokenId);
     ERC721(nftTokenAddress).approve(address(charged), nftTokenId);
 

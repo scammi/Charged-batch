@@ -112,11 +112,11 @@ describe("Charged", function () {
 
       await Promise.all(mintPromises);
 
-      const txApprove = await soul.setApprovalForAll(batch.address, true);
-      await txApprove.wait();
+      // const txApprove = await soul.setApprovalForAll(batch.address, true);
+      // await txApprove.wait();
 
-      const approvedBeforeBatchAction = await soul.isApprovedForAll(signerAddress, batch.address);
-      expect(approvedBeforeBatchAction).to.equal(true);
+      // const approvedBeforeBatchAction = await soul.isApprovedForAll(signerAddress, batch.address);
+      // expect(approvedBeforeBatchAction).to.equal(true);
 
       await batch.createBonds(
         goerliAddresses.protonB.address,
