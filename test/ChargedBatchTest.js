@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const { ethers, deployments } = require("hardhat");
 
-const { default: Charged, mainnetAddresses } = require("@charged-particles/charged-js-sdk");
+const { default: Charged, goerliAddresses, protonBAbi } = require("@charged-particles/charged-js-sdk");
 
 describe("Charged", function () {
 
@@ -20,15 +20,38 @@ describe("Charged", function () {
     });
 
     it("Single bond", async () => {
-      const charged = new Charged({ providers: ethers.provider });
+      const signer = ethers.provider.getSigner();
+      const signerAddress = await signer.getAddress();
 
-      const nft = charged.NFT(mainnetAddresses.protonB.address, 1);
-      
+      const charged = new Charged({ providers: ethers.provider, signer });
+
+      const nft = charged.NFT(goerliAddresses.protonB.address, 1);
+
       const bondCountBeforeDeposit = await nft.getBonds('generic.B');
       const currentTestNetwork = await ethers.provider.getNetwork();
       const bondCountBeforeDepositValue = bondCountBeforeDeposit[currentTestNetwork.chainId].value;
 
       expect(bondCountBeforeDepositValue.toNumber()).equal(0);
+
+      // Mint proton
+      const erc721Contract = new ethers.Contract(goerliAddresses.protonB.address, protonBAbi, signer);
+      const protonId = await erc721Contract.callStatic.createBasicProton(
+        signerAddress,
+        signerAddress,
+        'tokenUri.com',
+      );
+
+      const txCreateProton = await erc721Contract.createBasicProton(
+        signerAddress,
+        signerAddress,
+        'tokenUri.com',
+      );
+
+      await txCreateProton.wait();
+
+      console.log(batch.address)
+      // const txApprove = await erc721Contract.approve(, protonId.toString());
+      // await txApprove.wait();
     });
   });
 })
