@@ -1,7 +1,7 @@
 const { expect } = require("chai");
 const { ethers, deployments } = require("hardhat");
 
-const { default: Charged, goerliAddresses, protonBAbi } = require("@charged-particles/charged-js-sdk");
+const { default: Charged, goerliAddresses, protonAbi } = require("@charged-particles/charged-js-sdk");
 
 describe("Charged", function () {
 
@@ -55,11 +55,19 @@ describe("Charged", function () {
       const approvedBeforeBatchAction = await erc721Contract.isApprovedForAll(signerAddress, batch.address);
       expect(approvedBeforeBatchAction).to.equal(true);
 
-      const singleBond = await batch.singleBond(goerliAddresses.protonB.address, protonId.toString());
-      await singleBond.wait();
+      const singleBond = await batch.singleBond(
+        goerliAddresses.protonB.address, 
+        protonId.toString(),
+        'generic.B',
+        goerliAddresses.protonB.address,
+        1,
+        1
+      );
+      const singleBondReceipt = await singleBond.wait();
+      console.log(singleBond, singleBondReceipt);
 
-      const approved = await erc721Contract.getApproved(protonId.toString());
-      expect(approved).to.equal(goerliAddresses.chargedParticles.address);
+      // const approved = await erc721Contract.getApproved(protonId.toString());
+      // expect(approved).to.equal(goerliAddresses.chargedParticles.address);
     });
   });
 })

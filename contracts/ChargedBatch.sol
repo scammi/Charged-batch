@@ -27,11 +27,19 @@ contract ChargedBatch {
 
   function singleBond(
     address contractAddress,
-    uint256 tokenId
+    uint256 tokenId,
+    string calldata basketManagerId, 
+    address nftTokenAddress,
+    uint256 nftTokenId,
+    uint256 nftTokenAmount
   ) external returns (address approved) {
     // require(ERC721(contractAddress).getApproved(tokenId) == address(this), "Missing permission");
-
+    
+    // TODO manage erc1155
     ERC721(contractAddress).approve(address(charged), tokenId);
+
+    charged.covalentBond(contractAddress, tokenId, basketManagerId, nftTokenAddress, nftTokenId, nftTokenAmount);
+
 
     return ERC721(contractAddress).getApproved(tokenId);
   }
