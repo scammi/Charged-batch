@@ -2,7 +2,10 @@
 
 type GLOBALS = {
   INFURA_APIKEY: string;
-  CONTRACT_ADDRESSES: {};
+  CONTRACT_ADDRESSES: {
+    chargedBatch: any,
+    soul: any,
+  };
 }
 const GLOBALS: GLOBALS = {
   INFURA_APIKEY:  "aebcaf12b8f848048529c2682a65917e",
@@ -11,6 +14,10 @@ const GLOBALS: GLOBALS = {
       // 1: '',
       5: '0x433ac291e9f1E584C4c40CeAD8930cfC1b9a85E1',
       31337: '0x433ac291e9f1E584C4c40CeAD8930cfC1b9a85E1',
+    },
+    soul: {
+      5: '0xc43402733040ab5342c09474d8A5DaA9b5B5E17a',
+      31337: '0xc43402733040ab5342c09474d8A5DaA9b5B5E17a',
     }
   }
 };

@@ -22,11 +22,14 @@ module.exports = {
   },
   networks: {
     localhost: {
-      url: "http://127.0.0.1:8545",
       chainId: 31337,
+      forking: {
+        url: "https://eth-goerli.g.alchemy.com/v2/Gc62sJ3OMpPiloXAvCWtJfI1rxlSlwuf",
+        blockNumber: 7827722
+      }
     },
     hardhat: {
-      chainId: 5,
+      chainId: 31337,
       forking: {
         url: "https://eth-goerli.g.alchemy.com/v2/Gc62sJ3OMpPiloXAvCWtJfI1rxlSlwuf",
         blockNumber: 7827722
