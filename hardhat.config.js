@@ -35,5 +35,14 @@ module.exports = {
         blockNumber: 7827722
       }
     },
+    goerli: {
+      accounts: {
+        mnemonic:
+          'become rhythm degree culture unfair vocal post summer plate camera viable echo',
+        count: 8,
+      },
+      url: "https://eth-goerli.g.alchemy.com/v2/Gc62sJ3OMpPiloXAvCWtJfI1rxlSlwuf",
+      chainId: 5
+    }
   }
 };

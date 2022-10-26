@@ -14,4 +14,4 @@ const { ethers } = require("hardhat");
   });
 
   await Promise.all(mintPromises);
-})();
+})()
