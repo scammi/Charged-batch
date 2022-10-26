@@ -98,7 +98,7 @@ const CSVSelector = ({ setBatchData }) => {
 const CSVTable = ({ data }) => {
   return (
     <TableContainer component={Paper}>
-      <Table size="small">
+      <Table size="">
         <TableHead>
           <TableRow>
             <TableCell>sending nftAddress</TableCell>
@@ -112,9 +112,9 @@ const CSVTable = ({ data }) => {
           {_.map(data, (item, i) => {
             return (
               <TableRow key={i}>
-                <TableCell>{item.nftTokenAmount}</TableCell>
-                <TableCell>{item.nftTokenId}</TableCell>
                 <TableCell>{item.nftTokenAddress}</TableCell>
+                <TableCell>{item.nftTokenId}</TableCell>
+                <TableCell>{item.nftTokenAmount}</TableCell>
                 <TableCell>{item.basketNftAddress}</TableCell>
                 <TableCell>{item.basketNftTokenId}</TableCell>
               </TableRow>
