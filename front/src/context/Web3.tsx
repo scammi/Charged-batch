@@ -88,7 +88,7 @@ export function Updater() {
   }, []); // eslint-disable-line
 
   useEffect(() => {
-    console.log(state);
+    // console.log(state);
 
     if (state.instance?.on) {
       const handleAccountsChanged = async (accounts) => {

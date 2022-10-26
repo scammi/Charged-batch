@@ -6,7 +6,6 @@ export const MetamaskConnect = () => {
   const [web3, , connect, disconnect] = useWeb3Context();
 
   const _connectWallet = async () => {
-    console.log("HEY I RUN JS !!!!!!");
     try {
       await connect();
     } catch (err) {
