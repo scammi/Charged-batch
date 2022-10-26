@@ -1,5 +1,6 @@
 import React from 'react'
 import { useWeb3Context } from '../context/Web3';
+import Button from '@mui/material/Button';
 
 export const MetamaskConnect = () => {
   const [web3, , connect, disconnect] = useWeb3Context();
@@ -23,12 +24,12 @@ export const MetamaskConnect = () => {
 
   const ConnectButton = () => (
     <div>
-      <button onClick={() => { _connectWallet() }}>Connect</button>
+      <Button onClick={() => { _connectWallet() }}>Connect</Button>
     </div>
   );
 
   const DisconnectButton = () => (
-    <button onClick={() => { _disconnectWallet() }}>Disconnect</button>
+    <Button onClick={() => { _disconnectWallet() }}>Disconnect</Button>
   )
 
   return (
@@ -36,8 +37,8 @@ export const MetamaskConnect = () => {
       {web3.isConnected && (
         <div>
           <div className="inline">
-            <div className="account">{web3.connectedAccount}</div>
             <DisconnectButton/>
+            {/* <div className="account">{web3.connectedAccount}</div> */}
           </div>
           <br />
         </div>

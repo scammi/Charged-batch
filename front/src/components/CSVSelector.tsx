@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, FilledInput } from "@mui/material";
+import { Button } from "@mui/material";
 import Papa from "papaparse";
 
 // Allowed extensions for input file
