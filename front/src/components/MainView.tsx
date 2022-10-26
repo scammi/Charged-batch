@@ -92,10 +92,6 @@ const MainView = ({ }: Props) => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
 
-  const isStepOptional = (step: number) => {
-    return step === 1;
-  };
-
   const isStepSkipped = (step: number) => {
     return skipped.has(step);
   };
@@ -113,21 +109,6 @@ const MainView = ({ }: Props) => {
 
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  const handleSkip = () => {
-    if (!isStepOptional(activeStep)) {
-      // You probably want to guard against something like this,
-      // it should never occur unless someone's actively trying to break something.
-      throw new Error("You can't skip a step that isn't optional.");
-    }
-
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped((prevSkipped) => {
-      const newSkipped = new Set(prevSkipped.values());
-      newSkipped.add(activeStep);
-      return newSkipped;
-    });
   };
 
   const handleReset = () => {
@@ -161,10 +142,11 @@ const MainView = ({ }: Props) => {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          {
-            activeStep === 0 ? <IsApprovedForAllButton /> : 
-            activeStep === 1 ? <CSVSelector setBatchData={setBatchData}/> : <BatchBondButton />
-          }
+          <Box py="40px">
+            {activeStep === 0 ? <IsApprovedForAllButton /> : 
+              activeStep === 1 ? <CSVSelector setBatchData={setBatchData}/> : <BatchBondButton />
+            }
+          </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"

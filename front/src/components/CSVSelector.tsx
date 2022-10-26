@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Button, FilledInput } from "@mui/material";
 import Papa from "papaparse";
 
 // Allowed extensions for input file
@@ -13,6 +14,7 @@ const CSVSelector = ({ setBatchData }) => {
 
   // It will store the file uploaded by the user
   const [file, setFile] = useState("");
+  const [fileName, setFileName] = useState("");
 
   // This function will be called when
   // the file input changes
@@ -21,7 +23,10 @@ const CSVSelector = ({ setBatchData }) => {
 
     // Check if user has entered the file
     if (e.target.files.length) {
+      console.log(e.target.files)
       const inputFile = e.target.files[0];
+
+      setFileName(inputFile?.name)
 
       // Check the file extensions, if it not
       // included in the allowed extensions
@@ -32,11 +37,12 @@ const CSVSelector = ({ setBatchData }) => {
         return;
       }
 
-      // If input type is correct set the state
       setFile(inputFile);
+      handleParse(inputFile);
+      // If input type is correct set the state
     }
   };
-  const handleParse = () => {
+  const handleParse = (file) => {
 
     // If user clicks the parse button without
     // a file we show a error
@@ -60,20 +66,21 @@ const CSVSelector = ({ setBatchData }) => {
 
   return (
     <div>
-      <label htmlFor="csvInput" style={{ display: "block" }}>
-        Enter CSV File
-      </label>
       <input
+        style={{ display: 'none' }}
+        id="raised-button-file"
+        multiple
+        type="file"
         onChange={handleFileChange}
-        id="csvInput"
         name="file"
-        type="File"
       />
-      <div>
-        <button onClick={handleParse}>Set</button>
-      </div>
-      <div style={{ marginTop: "3rem" }}>
-        {error}
+      <label htmlFor="raised-button-file">
+        <Button component="span">
+          Upload
+        </Button>
+      </label>
+      <div style={{ marginTop: "1rem" }}>
+        {error || fileName}
       </div>
     </div>
   );
