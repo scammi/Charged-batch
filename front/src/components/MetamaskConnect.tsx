@@ -23,9 +23,7 @@ export const MetamaskConnect = () => {
   }
 
   const ConnectButton = () => (
-    <div>
-      <Button onClick={() => { _connectWallet() }}>Connect</Button>
-    </div>
+    <Button onClick={() => { _connectWallet() }}>Connect</Button>
   );
 
   const DisconnectButton = () => (

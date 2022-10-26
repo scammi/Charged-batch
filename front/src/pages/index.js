@@ -16,17 +16,21 @@ const IndexPage = () => {
     return supportedNetworks.includes(String(web3.chainId));
   };
 
+  const Hello = () => {
+    return (
+      <h1>Please select a supported network</h1>
+    )
+  };
+
   return (
     <Layout>
       <Seo title="Home" />
       <div className={styles.textCenter}>
-        <h1>
-          Welcome to <b>Massv!</b>
-        </h1>
-          {
-           web3.isConnected ? isNetworkSupported() ? <MainView /> : 'Please select a supported network' : 
-            'Please connect wallet'
-          }
+        { !web3.isConnected && <h1> Welcome to <b>Massv!</b> </h1> }         
+        {
+          web3.isConnected ? isNetworkSupported() ? <MainView /> : 'Please select a supported network' : 
+          'Please connect wallet'
+        }
       </div>
     </Layout>
   )
