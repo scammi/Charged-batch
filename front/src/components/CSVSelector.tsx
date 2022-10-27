@@ -1,7 +1,14 @@
 import React, { useState } from "react";
-import { Button } from "@mui/material";
+import { Button, Paper } from "@mui/material";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import Papa from "papaparse";
-
+import _ from "lodash";
+import styled from '@emotion/styled';
 // Allowed extensions for input file
 const allowedExtensions = ["csv"];
 
@@ -15,7 +22,7 @@ const CSVSelector = ({ setBatchData }) => {
   // It will store the file uploaded by the user
   const [file, setFile] = useState("");
   const [fileName, setFileName] = useState("");
-
+  const [csvData, setCsvData] = useState([]);
   // This function will be called when
   // the file input changes
   const handleFileChange = (e) => {
@@ -57,13 +64,14 @@ const CSVSelector = ({ setBatchData }) => {
     reader.onload = async ({ target }) => {
       const csv = Papa.parse(target.result, { header: true });
       const parsedData = csv?.data;
-      console.log(parsedData);
+      setCsvData(parsedData);
 
       setBatchData(parsedData);
     };
     reader.readAsText(file);
   };
 
+  const rn = () => Math.floor(Math.random() * 10000000);
   return (
     <div>
       <input
@@ -81,9 +89,48 @@ const CSVSelector = ({ setBatchData }) => {
       </label>
       <div style={{ marginTop: "1rem" }}>
         {error || fileName}
+        {!_.isEmpty(csvData) && <CSVTable data={csvData} />}
       </div>
     </div>
   );
 };
+
+const CSVTable = ({ data }) => {
+  return (
+    <TableContainer component={Paper}>
+      <Table size="">
+        <TableHead>
+          <TableRow>
+            <TableCell>sending nftAddress</TableCell>
+            <TableCell>sending tokenId</TableCell>
+            <TableCell>sending amount</TableCell>
+            <TableCell>receiving nftAddress</TableCell>
+            <TableCell>receiving tokenId</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {_.map(data, (item, i) => {
+            return (
+              <TableRow key={i}>
+                <TableCell>{item.nftTokenAddress}</TableCell>
+                <TableCell>{item.nftTokenId}</TableCell>
+                <TableCell>{item.nftTokenAmount}</TableCell>
+                <TableCell>{item.basketNftAddress}</TableCell>
+                <TableCell>{item.basketNftTokenId}</TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  )
+}
+const El = styled.span`
+  background-color: #77777733;
+  font-size:0.4em;
+  color: black;
+  padding: .1em;
+  margin: .1em;
+`
 
 export { CSVSelector };
